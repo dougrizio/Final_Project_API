@@ -1,0 +1,250 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<style>
+#main_table {
+
+  top: 800px;
+  position: absolute;
+  left: 25px;
+
+  border: 3px solid #73AD21;
+  padding: 10px;
+}
+.entry {
+
+  position: absolute;
+  left: 25px;
+  width: 600px;
+  border: 3px solid #73AD21;
+  padding: 10px;
+}
+
+#right_col {
+
+    position: absolute;
+    right: 10%;
+    width: 800px;
+
+}
+</style>
+
+
+
+<div class="entry">
+   <form action="/stats" method="POST">
+       <h1>Enter Calculations here </h1>
+        <div class="row2">
+            <label for="num1">First Number</label>
+            <input id="num1" type="text" class="form-control" placeholder="0" name="num1">
+        </div>
+        <div class="row2">
+            <label for="num2">Second Number</label>
+            <input id="num2" type="text" class="form-control" placeholder="0"
+                   name="num2">
+        </div>
+
+       <div class="row2">
+            <label for="num3">Third Number</label>
+            <input id="num3" type="text" class="form-control" placeholder="0"
+                   name="num3">
+        </div>
+
+       <div class="row2">
+            <label for="num4">Fourth Number</label>
+            <input id="num4" type="text" class="form-control" placeholder="0"
+                   name="num4">
+        </div>
+
+       <div class="row2">
+            <label for="num5">Fifth Number</label>
+            <input id="num5" type="text" class="form-control" placeholder="0"
+                   name="num5">
+        </div>
+
+       <div class="row2">
+            <label for="num6">Sixth Number</label>
+            <input id="num6" type="text" class="form-control" placeholder="0"
+                   name="num6">
+        </div>
+
+       <div class="row2">
+         <label for="operation">Select Operation</label>
+         <select id="operation" class="form-control" name="operation">
+            <option value = "mean" >Mean</option>
+             <option value = "median" >Median</option>
+             <option value = "deviation" >Deviation</option>
+             <option value = "variance" >Variance</option>
+
+         </select>
+
+        </div>
+       <br>
+
+
+    <button type="submit" class="btn btn-success">Calculate</button>
+
+   </form>
+
+</div>
+
+<div id="main_table">
+<table class="left" style="width:900px">
+
+    <thead>
+
+    <tr>
+        <th scope="col">ID</th>
+        <th scope="col">Number 1</th>
+        <th scope="col">Number 2</th>
+        <th scope="col">Number 3</th>
+        <th scope="col">Number 4</th>
+        <th scope="col">Number 5</th>
+        <th scope="col">Number 6</th>
+        <th scope="col">Operation</th>
+        <th scope="col">Result </th>
+
+    </tr>
+    </thead>
+    <tbody>
+    {% for num in stat_result %}
+    <tr>
+
+        <td><a href="stats/view/{{num.id}}">{{ num.id }}</a></td>
+        <td> {{ num.num1 }}</td>
+        <td> {{ num.num2 }}</td>
+        <td> {{ num.num3 }}</td>
+        <td> {{ num.num4 }}</td>
+        <td> {{ num.num5 }}</td>
+        <td> {{ num.num6 }}</td>
+        <td> {{ num.operation }}</td>
+        <td> {{ num.result}}</td>
+
+
+
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>
+</div>
+
+<div id="right_col">
+    <h1>Total</h1>
+    <div class="ct-chart ct-golden-section" id="chart_total"></div>
+
+
+
+<script>
+ //Total data
+    var data = {
+
+  labels: [{% for stat in stat_result %}
+               "{{ stat.id }}",
+              {% endfor %}],
+
+  series: [
+    [{% for stat in stat_result %}
+               "{{ stat.result }}",
+              {% endfor %}]
+  ]
+};
+
+
+
+  new Chartist.Line('#chart_total', data);
+
+</script>
+
+
+
+
+
+
+
+
+    <h1>Median</h1>
+    <div class="ct-chart ct-golden-section" id="chart_median"></div>
+ <script>
+ //Median_Chart data
+    var data = {
+
+  labels: [{% for stat in median_count %}
+               "{{ stat.id }}",
+              {% endfor %}],
+
+  series: [
+    [{% for stat in median_count %}
+               "{{ stat.result }}",
+              {% endfor %}]
+  ]
+};
+
+
+
+  new Chartist.Line('#chart_median', data);
+
+</script>
+
+<h1>Standard Deviation</h1>
+<div class="ct-chart ct-golden-section" id="chart_deviation"></div>
+
+ <script>
+ //deviation_Chart data
+    var data = {
+
+  labels: [{% for stat in deviation_count %}
+               "{{ stat.id }}",
+              {% endfor %}],
+
+  series: [
+    [{% for stat in deviation_count %}
+               "{{ stat.result }}",
+              {% endfor %}]
+  ]
+};
+
+
+
+  new Chartist.Line('#chart_deviation', data);
+
+
+</script>
+
+<h1>Variance</h1>
+<div class="ct-chart ct-golden-section" id="chart_variance"></div>
+
+
+ <script>
+ //Variance_Chart data
+    var data = {
+
+  labels: [{% for stat in var_result %}
+               "{{ stat.id }}",
+              {% endfor %}],
+
+  series: [
+    [{% for stat in var_result %}
+               "{{ stat.result }}",
+              {% endfor %}]
+  ]
+};
+
+
+
+  new Chartist.Line('#chart_variance', data);
+
+
+</script>
+
+
+
+
+</div>
+
+
+
+
+{% endblock %}
+
+
+

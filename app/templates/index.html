@@ -1,21 +1,25 @@
-<html>
-    <head>
-        <title>Flask Login Page</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link href="static/bootstrap.min.css" rel="stylesheet" media="screen">
-    </head>
-    <body>
-        <div class="container">
-            <h1>Please Login</h1>
-            <br>
-            <form action="" method="post">
-                <input type="text" placeholder="Username" name="username" value="{{ request.form.username }}">
-                <input type="password" placeholder="Password" name="password" value="{{ request.form.password }}">
-                <input class="btn btn-default" type="submit" value="Login">
-            </form>
-            {% if error %}
-            <p class="error"><strong>Error:</strong>strong> {{ error }}
-            {% endif %}
+        <div class="row2">
+            <label for="num2">Second Number</label>
+            <input id="num2" type="text" class="form-control" placeholder="Second Number"
+                   name="num2">
         </div>
-    </body>
-</html>
+        <div class="row2">
+         <label for="operation">Select Operation</label>
+         <select id="operation" class="form-control" name="operation">
+            <option value = "add" selected>Add</option>
+            <option value = "subtract">Subtract</option>
+            <option value = "multiply">Multiply</option>
+             <option value = "divide">Divide</option>
+             <option value = "square">Square</option>
+             <option value = "sqrt">Square Root</option>
+         </select>
+
+        </div>
+       <br>
+
+
+    <button type="submit" class="btn btn-success">Calculate</button>
+
+   </form>
+</div>
+{% endblock %}

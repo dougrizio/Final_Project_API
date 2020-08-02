@@ -1,0 +1,24 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<div class="card" class="m-5 p-2">
+    <h5 class="card-title">Stat # {{ num_result.id }}</h5>
+
+    <ul class="list-group list-group-flush">
+        <li class="list-group-item">First Number: {{ num_result.num1 }}</li>
+        <li class="list-group-item">Second Number: {{ num_result.num2 }}</li>
+         <li class="list-group-item">Second Number: {{ num_result.num3 }}</li>
+         <li class="list-group-item">Second Number: {{ num_result.num4 }}</li>
+         <li class="list-group-item">Second Number: {{ num_result.num5 }}</li>
+         <li class="list-group-item">Second Number: {{ num_result.num6 }}</li>
+        <li class="list-group-item">Operation: {{ num_result.operation }}</li>
+        <li class="list-group-item">Result: {{ num_result.result }}</li>
+
+    </ul>
+
+</div>
+<form action="/stats_delete/{{num_result.id}}" method="post"><button type="submit" class="btn btn-danger">Delete</button></form>
+
+
+{% endblock %}
+

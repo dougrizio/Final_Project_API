@@ -23,10 +23,8 @@ mysql.init_app(app)
 
 # ------------------ POSTS --------------------
 
-@app.route('/', methods=['GET', 'POST'])
+@app.route('/', methods=['GET'])
 def index():
-    bar_values = values
-    bar_labels = labels
     user = {'username': 'Mike'}
     cursor = mysql.get_db().cursor()
     cursor.execute('SELECT * FROM numberImport')
@@ -48,8 +46,6 @@ def form_delete_post(num_id):
     cursor.execute(sql_delete_query, num_id)
     mysql.get_db().commit()
     return redirect("/", code=302)
-
-
 
 
 #____________POSTMAN API's
@@ -122,6 +118,7 @@ def api_delete(id) -> str:
 def bar():
     bar_labels=labels
     bar_values=values
+    user = {'username': 'Mike'}
     cursor = mysql.get_db().cursor()
     cursor.execute('SELECT * FROM numberImport')
     result = cursor.fetchall()
@@ -167,9 +164,7 @@ def form_insert_post():
 #stats
 
 @app.route('/stats', methods=['GET'])
-def stat_
-
-():
+def stat_index():
     cursor_all= mysql.get_db().cursor()
     cursor_all.execute('SELECT * FROM statsImport')
     result = cursor_all.fetchall()

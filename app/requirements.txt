@@ -2,10 +2,11 @@ Flask
 flask-mysql
 flask-login
 flask-sqlalchemy
-simplejson
-flask-wtf
-wtforms
 flask-bootstrap
+flask-wtf
+flask-mail
+simplejson
+wtforms
 email-validator
 Calculator
 Statistics

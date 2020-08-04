@@ -15,7 +15,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 
 from flask_mail import Mail, Message
-from itsdangerous import URLSafeTimedSerializer
+from itsdangerous import URLSafeTimedSerializer, SignatureExpired
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'Thisissupposedtobesecret!'
@@ -29,7 +29,7 @@ login_manager.login_view = 'login'
 
 mail = Mail(app)
 
-s = URLSafeTimedSerializer('Thisisasecret')
+serializer = URLSafeTimedSerializer('Thisisasecret')
 
 mysql = MySQL(cursorclass=DictCursor)
 
@@ -63,11 +63,27 @@ class RegisterForm(FlaskForm):
     username = StringField('username', validators=[InputRequired(), Length(min=4, max=15)])
     password = PasswordField('password', validators=[InputRequired(), Length(min=8, max=80)])
 
-@app.route('/confirm', methods=['GET', 'POST'])
-def confirm():
+@app.route('/', methods=['GET', 'POST']) ### change '/' and move to signup later ###
+def confirmationtemporary():
     if request.method == 'GET':
-        return '<form action="/confirm" method="POST"><input name="email"><input type="submit"></form>'
-    return 'The email you entered is {}'.format(request.form['email'])
+        return '<form action="/" method="POST"><input name="email"><input type="submit"></form>' ### change '/' and move to signup later ###
+
+    email = request.form['email']
+    token = serializer.dumps(email, salt='email-confirm')
+    msg = Message('Confirm Email', sender='dr49@njit.edu', recipients=[email])
+    link = url_for('confirm', token=token, _external=True)
+    msg.body = 'Your link is {}'.format(link)
+    mail.send(msg)
+
+    return '<h1>The email you entered is {} The token is {}</h1>'.format(email, token)
+
+@app.route('/confirm/<token>')
+def confirm(token):
+    try:
+        email = serializer.loads(token, salt='email-confirm', max_age=3600)
+    except SignatureExpired:
+        return '<h1>The token is expired!</h1>'
+    return 'The token works!'
 
 @app.route('/', methods=['GET'])
 @login_required

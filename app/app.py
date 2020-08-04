@@ -15,6 +15,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 
 from flask_mail import Mail, Message
+from itsdangerous import URLSafeTimedSerializer
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'Thisissupposedtobesecret!'
@@ -27,6 +28,8 @@ login_manager.init_app(app)
 login_manager.login_view = 'login'
 
 mail = Mail(app)
+
+s = URLSafeTimedSerializer('Thisisasecret')
 
 mysql = MySQL(cursorclass=DictCursor)
 
@@ -59,6 +62,12 @@ class RegisterForm(FlaskForm):
     email = StringField('email', validators=[InputRequired(), Email(message='Invalid email'), Length(max=50)])
     username = StringField('username', validators=[InputRequired(), Length(min=4, max=15)])
     password = PasswordField('password', validators=[InputRequired(), Length(min=8, max=80)])
+
+@app.route('/confirm', methods=['GET', 'POST'])
+def confirm():
+    if request.method == 'GET':
+        return '<form action="/confirm" method="POST"><input name="email"><input type="submit"></form>'
+    return 'The email you entered is {}'.format(request.form['email'])
 
 @app.route('/', methods=['GET'])
 @login_required
